@@ -1,0 +1,42 @@
+<h1>Study Groups</h1>
+
+
+<table class="bordered highlight">
+  <thead>
+    <tr>
+        <th>Topic</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Location</th>
+        <th>Status</th>
+        <th>More Details</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @groups.each do |g| %>
+    <tr>
+      <td><%= g.topic %></td>
+      <td><%= g.time.strftime("%a, %B %d, %Y") %></td>
+      <td><%= g.time.strftime("%I:%M %p") %></td>
+      <td><%= g.location %></td>
+      <td><% if happened?(g) %>
+        <%= "This Study Group alreay met" %>
+      <% else %>
+        <% if g.users.include?(@user) %>
+          <% if admin?(@user, g) %>
+          <%= "You're Running the Show" %>
+          <% else %>
+          <%= "You're signed up" %>
+          <% end %>
+        <% else %>
+        <%= "Join!" %>
+        <% end %>
+      <% end %></td>
+      <td><%= link_to "details page", group_path(g) %></td>
+
+    </tr>
+    <% end %>
+  </tbody>
+
+</table>

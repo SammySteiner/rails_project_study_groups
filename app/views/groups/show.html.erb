@@ -1,0 +1,90 @@
+<h1>Study Group</h1>
+
+<% if flash[:message] %>
+<div>
+  <%= flash[:message] %>
+</div>
+<% end %>
+
+<div class="row">
+  <div class="col s6">
+    <div class="card teal darken-1">
+      <div class="card-content white-text">
+        <span class="card-title">Topic: <%= @group.topic %></span>
+
+          <ul>
+            <span style="font-weight: bold">Location: </span><%= @group.location %>
+          </ul>
+          <ul>
+            <span style="font-weight: bold">Date: </span><%= @group.time.strftime("%a, %B %d, %Y") %>
+          </ul>
+          <ul>
+            <span style="font-weight: bold">Time: </span><%= @group.time.strftime("%I:%M %p") %>
+          </ul>
+          <ul>
+            <span style="font-weight: bold">Attending: </span>
+            <% list = @group.users.map { |user| user.name.capitalize } %>
+            <%= list.split(" ").join(", ") %>
+          </ul>
+          <ul>
+            <span style="font-weight: bold">Admin: </span> <%= @group.admin.name.capitalize %>
+          </ul>
+          </div>
+      <div class="card-action">
+        <% if happened?(@group) %>
+        <div class="card-content white-text">
+          <%= "This Study Group already met." %>
+        </div>
+        <% else %>
+        <% if @group.users.include?(@user) %>
+        <% if admin?(@user, @group) %>
+        <div class="row">
+          <div class="col">
+            <%= link_to "Edit Group", edit_group_path(@group), class: "waves-effect waves-light btn" %>
+          </div>
+          <div class="col">
+            <%= form_for @group, method: 'delete' do |f| %>
+              <%= f.button "Delete Group", class: "waves-effect waves-light btn" %>
+            <% end %>
+          </div>
+        </div>
+            <% else %>
+              <%= form_for @attendance, method: 'delete' do |f| %>
+                <%= f.button "Leave Group", class: "waves-effect waves-light btn" %>
+              <% end %>
+            <% end %>
+          <% else %>
+            <%= form_for(@attendance) do |f| %>
+              <%= f.button "Join Group", class: "waves-effect waves-light btn" %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+  <h5>Comments:</h5>
+  <ul>
+  <% if @group.notes.any? %>
+    <% @group.notes.each do |note| %>
+    <li>
+      <ul>
+        From <%= note.user.name.capitalize %> at <%= note.created_at.strftime("%I:%M %p") %> on <%= note.created_at.strftime("%a, %B %d, %Y") %>.
+      </ul>
+      <ul>
+        Comment: <%= note.content %>
+      </ul><br>
+    </li>
+    <% end %>
+    <% else %>
+      <%= "There are no comments yet. Start the discussion!" %>
+    <% end %>
+  </ul>
+
+<h5>Join the discussion:</h5>
+<%= form_for(@note) do |f| %>
+<%= f.label :content, "Your Comment:" %>
+<%= f.text_area :content, class:"materialize-textarea" %>
+<%= f.hidden_field :group_id, value: @group.id %>
+<%= f.submit "Submit your comment", class: "waves-effect waves-light btn" %>
+<% end %>

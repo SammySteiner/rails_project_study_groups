@@ -1,0 +1,24 @@
+<h1>Edit Group Page</h1>
+
+<% if flash[:message] %>
+<div>
+  <%= flash[:message] %>
+</div>
+<% end %>
+
+<%= form_for @group, method: 'patch' do |f| %>
+<%= f.label :topic %>
+<%= f.text_field :topic %>
+<%= f.label :location %>
+<%= f.text_field :location %>
+<%= f.label :time %>
+<%= f.datetime_field :time %>
+<%= f.hidden_field :admin_id, value: @user.id %>
+<%= f.submit "Edit Group", class: "waves-effect waves-light btn" %>
+<% end %>
+
+<br>
+
+<%= form_for @group, method: 'delete' do |f| %>
+  <%= f.submit "Delete Study Group", class: "waves-effect waves-light btn"%>
+<% end %>

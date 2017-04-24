@@ -1,0 +1,18 @@
+<h1>Welcome to Study Groups!</h1>
+
+<% if flash[:message] %>
+<div>
+  <%= flash[:message] %>
+</div>
+<% end %>
+
+<h3>Sign In:</h3>
+<div>
+<%= form_tag '/sessions' do %>
+<%= label_tag :"user[name]", "Name" %><br>
+<%= text_field_tag :"user[name]" %><br>
+<%= label_tag :"user[password]", "Password" %><br>
+<%= password_field_tag :"user[password]" %><br>
+<%= submit_tag "Sign In", class: "waves-effect waves-light btn"%>
+<% end %>
+</div><br>

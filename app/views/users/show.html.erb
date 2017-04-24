@@ -1,0 +1,48 @@
+<% if flash[:message] %>
+<div>
+  <%= flash[:message] %>
+</div><br>
+<% end %>
+
+<h1>Hi <%= @user.name.capitalize %></h1>
+<div class="row">
+  <div class="col s6">
+    <div class="card teal darken-1">
+      <div class="card-content white-text">
+        <span class="card-title">Upcoming Study Groups</span>
+          <% if @groups.length > 0 %>
+            <% @groups.each do |g| %>
+              <% if !happened?(g)%>
+                <li>
+                  <%= g.topic %> is happening on <%= g.time.strftime("%a, %B %d, %Y") %> at <%= g.time.strftime("%I:%M %p") %> in <%= g.location %>.<br>
+                  <%= link_to "More Details", group_path(g), {:style=>'color:#ff8a80;', :class => "css_class"}  %>
+                </li>
+              <% end %>
+            <% end %>
+          <% else %>
+            <%= "You haven't signed up for any Study Groups!" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col s6">
+      <div class="card teal darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">Past Study Groups</span>
+          <% if @groups.length > 0 %>
+            <% @groups.each do |g| %>
+              <% if happened?(g) %>
+              <li>
+                <%= g.topic %> is happening on <%= g.time.strftime("%a, %B %d, %Y") %> at <%= g.time.strftime("%I:%M %p") %> in <%= g.location %>.<br>
+                <%= link_to "More Details", group_path(g), {:style=>'color:#ff8a80;', :class => "css_class"} %>
+              </li>
+              <% end %>
+            <% end %>
+          <% else %>
+            <%= "You haven't attended any Study Groups!" %>
+          <% end %>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
