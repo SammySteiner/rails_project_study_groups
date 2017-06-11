@@ -14,6 +14,7 @@ class UsersController < ApplicationController
         redirect_to signup_path
       end
     else
+      flash[:message] = "Sorry the username " + @user.name + ' is already taken. Please choose another.'
        @user.errors.full_messages.join(". ")
       render signup_path
     end
@@ -71,7 +72,7 @@ class UsersController < ApplicationController
 
   def user_params
     params[:user][:name] = params[:user][:name].downcase
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :password, :password_confirmation)
   end
 
 end
